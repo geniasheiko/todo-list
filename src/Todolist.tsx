@@ -3,7 +3,7 @@ import { FilterValuesType } from './App';
 import { title } from 'process';
 import { AddItemForm } from './AddItemForm';
 import { EditableSpan } from './EditableSpan';
-import { Button, IconButton } from '@mui/material';
+import { Button, Checkbox, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 
 
@@ -59,7 +59,7 @@ const addTask = (title: string) => {
       </IconButton>
       </h3>
       <AddItemForm addItem={addTask}/>
-      <ul>
+      <div>
          {
           props.tasks.map(t => {
             const onRemoveHandler = () => props.removeTask(t.id, props.id)
@@ -73,20 +73,18 @@ props.changeTaskTitle(t.id, newValue, props.id);
 
 
             
-            return <li key={t.id} className={t.isDone ? "is-done" : ""}>
-              <input type='checkbox'
-              onChange={onChangeStatusHandler} 
-              checked={t.isDone}/>
+            return <div key={t.id} className={t.isDone ? "is-done" : ""}>
+              <Checkbox onChange={onChangeStatusHandler} checked={t.isDone}/>
              <EditableSpan title={t.title} 
              onChange={onChangeTitleHandler} />
             <IconButton onClick={onRemoveHandler} >
         <Delete />
       </IconButton>
-            </li>
+            </div>
           })
         }
        
-      </ul>
+      </div>
       <div>
         <Button variant={ props.filter === 'all' ? "contained" : "text"} 
          onClick={onAllClickHandler}>All</Button>

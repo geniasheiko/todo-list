@@ -4,16 +4,18 @@ import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import { AddItemForm } from './AddItemForm';
+import { AppBar, Button, Container, Grid, Grid2, IconButton, Paper, Toolbar, Typography } from '@mui/material';
+import { Menu } from '@mui/icons-material';
 
 export type FilterValuesType = "all" | "completed" | "active";
 
-type TodoListType = {
+export type TodoListType = {
   id: string
   title: string
   filter: FilterValuesType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
   [key: string]: Array<TaskType>
 }
 
@@ -117,8 +119,23 @@ setTasks({
 
   return (
     <div className="App">
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <Menu />
+          </IconButton>
+          <Typography variant="h6">
+            News
+</Typography>
+<Button color='inherit'></Button>
+        </Toolbar>
+      </AppBar>
+      <Container fixed>
+        
+<Grid2 container spacing={4} style={ {padding: "20px"} }>
+
       <AddItemForm addItem={addTodoList} />
-   
+     
       {
         todoLists.map( (tl) => {
           let tasksForTodoList = tasksObj[tl.id];
@@ -129,7 +146,8 @@ setTasks({
       tasksForTodoList = tasksForTodoList.filter(t => t.isDone === false); 
     }
 
-          return <Todolist
+          return <Paper style={{ padding: "10px"}}>
+          <Todolist
           key={tl.id}
           id={tl.id}
           title={tl.title}
@@ -143,9 +161,12 @@ setTasks({
      removeTodoList = {removeTodoList}
      changeTodoListTitle={changeTodoListTitle}
      />
+     </Paper>
+     
         })
       }
-   
+      </Grid2>
+   </Container>
     </div>
   );
 }
