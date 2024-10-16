@@ -1,4 +1,4 @@
-import { ChangeTodoListFilterActionType, RemoveTodoListAC, todolistsReducer } from "./todolists-reducer";
+import { ChangeTodoListFilterActionType, removeTodoListAC, todolistsReducer } from "./todolists-reducer";
 import {v1} from "uuid";
 import { FilterValuesType, TodoListType } from "../App";
 
@@ -33,7 +33,7 @@ test('correct todoList should be removed', () => {
     
         
 
-            const endState = todolistsReducer(startState, RemoveTodoListAC(todoListId1))   
+            const endState = todolistsReducer(startState, removeTodoListAC(todoListId1))   
     
         expect(endState.length).toBe(3);
         expect(endState[2].id).toBe(newTodoListTitle);
