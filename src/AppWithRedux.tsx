@@ -1,5 +1,4 @@
-import React, { useReducer, useState } from 'react';
-import logo from './logo.svg';
+import React, { useCallback, useReducer, useState } from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
@@ -25,57 +24,47 @@ export type TasksStateType = {
   [key: string]: Array<TaskType>
 }
 
+
 function AppWithRedux() {
+console.log("App is called")
+
+  let todoListId1 = v1();
+  let todoListId2 = v1();
 
 const dispatch = useDispatch();
 const todoLists = useSelector<AppRootState, Array<TodoListType>>(state => state.todoLists);
 const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks);
 
-  
- function removeTask(id: string, todoListId:string) {
-  dispatch(removeTaskAC(id, todoListId));
- }
 
-    
-    function addTask(title:string, todoListId: string) {
-dispatch(addTaskAC(title, todoListId));
-    }
+const removeTask = useCallback((taskId: string, todoListId: string) => {
+  dispatch(removeTaskAC(taskId, todoListId));
+}, [dispatch]);
 
+const changeTaskStatus = useCallback((taskId: string, isDone: boolean, todoListId: string) => {
+  dispatch(changeTaskStatusAC(taskId, isDone, todoListId));
+}, [dispatch]);
 
-    function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
-      dispatch(changeTaskStatusAC(taskId, isDone,todolistId));
-    }       
+const changeTaskTitle = useCallback((taskId: string, newTitle: string, todoListId: string) => {
+  dispatch(changeTaskTitleAC(taskId, newTitle, todoListId));
+}, [dispatch]);
 
-    function changeTaskTitle(taskId: string, newTitle: string, todolistId: string) {
-      dispatch(changeTaskTitleAC(taskId, newTitle, todolistId));
-    
-      }
+const addTodoList = useCallback((title: string) => {
+  dispatch(addTodoListAC(title));
+},[dispatch]);
 
-      function changeFilter(value: FilterValuesType, todoListId: string) {
-        dispatch(changeTodoListFilterAC(todoListId, value))
-         }
-      
-      function removeTodoList(id: string) {
-        const action = removeTodoListAC(id);
-        dispatch(action);
-       
-    }
+const changeFilter = useCallback((value: FilterValuesType, todoListId: string) => {
+  dispatch(changeTodoListFilterAC(todoListId, value));
+}, [dispatch])
 
-    function changeTodoListTitle(id: string, title: string) {
-      const action = changeTododListTitleAC(id, title);
-      dispatch(action);
-    }
+const removeTodoList = useCallback((id: string) => {
+  dispatch(removeTodoListAC(id));
+}, [dispatch])
 
-   
-
-function addTodoList(title:string) {
-const action = addTodoListAC(title);
-dispatch(action);
-
-}
-
-
-  return (
+const changeTodoListTitle = useCallback((id: string, title: string) => {
+  dispatch(changeTododListTitleAC(id, title));
+}, [dispatch])
+ 
+return (
     <div className="App">
       <AppBar position="static">
         <Toolbar>
@@ -95,29 +84,25 @@ dispatch(action);
       <AddItemForm addItem={addTodoList} />
      
       {
-        todoLists.map( (tl) => {
-          let tasksForTodoList = tasks[tl.id];
-    if(tl.filter === "completed") {
-      tasksForTodoList = tasksForTodoList.filter(t => t.isDone === true); 
-    }
-    if(tl.filter === "active") {
-      tasksForTodoList = tasksForTodoList.filter(t => t.isDone === false); 
-    }
-
-          return <Paper style={{ padding: "10px"}}>
+            todoLists.map(tl => {
+              let allTodoListTasks = tasks[tl.id];
+              let tasksForTodoList = allTodoListTasks;
+      
+    
+return <Paper style={{ padding: "10px"}}>
           <Todolist
-          key={tl.id}
+key={tl.id}
           id={tl.id}
           title={tl.title}
-     tasks={ tasksForTodoList}
-     removeTask={removeTask}
+          tasks={tasksForTodoList}
      changeFilter={changeFilter}
-     addTask={addTask}
-     changeTaskStatus={changeStatus}
-     changeTaskTitle={changeTaskTitle}
      filter = {tl.filter}
      removeTodoList = {removeTodoList}
      changeTodoListTitle={changeTodoListTitle}
+      removeTask={removeTask}
+      changeTaskStatus={changeTaskStatus} 
+      changeTaskTitle={changeTaskTitle} 
+  
      />
      </Paper>
      
