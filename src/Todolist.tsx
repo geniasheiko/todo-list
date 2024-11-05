@@ -38,30 +38,22 @@ import { Task } from './state/Task';
   const tasks = useSelector<AppRootState, Array<TaskType>>(state => state.tasks[props.id]);
   const dispatch = useDispatch();
   
-  // const addTask = useCallback((title: string) => {
-  // props.addTask(title, props.id);
-  // }, [props.addTask, props.id]);
+ 
 
- function changeFilter(value: FilterValuesType, todoListId: string) {
-          dispatch(changeTodoListFilterAC(todoListId, value))
-           }
+const changeFilter = useCallback((value: FilterValuesType, todoListId: string) => {
+  dispatch(changeTodoListFilterAC(todoListId, value));
+}, [dispatch]);
   
   const [newTaskTitle, setNewTaskTitle] = useState("");
 
   
-  
- 
-  // const removeTodoList = () => {
-  //   props.removeTodoList(props.id);
-  //   }
+
 
     const removeTodoList = useCallback(() => {
       props.removeTodoList(props.id);
     }, [props.removeTodoList, props.id]);
 
-//  const changeTodoListTitle = useCallback((newTitle: string) => {
-//   props.changeTodoListTitle(props.id, newTitle);
-//  }, [props.id, props.changeTodoListTitle]);
+
 
  const changeTodoListTitle = useCallback((newTitle: string) => {
   props.changeTodoListTitle(props.id, newTitle);
@@ -70,6 +62,8 @@ import { Task } from './state/Task';
 const onAllClickHandler = useCallback(() => props.changeFilter("all", props.id),[props.changeFilter, props.id]);
 const onActiveClickHandler = useCallback(() => props.changeFilter("active", props.id),[props.changeFilter, props.id]);
 const onCompletedClickHandler = useCallback(() => props.changeFilter("completed", props.id),[props.changeFilter, props.id]);
+
+
 
 let allTodoListTasks = tasks;
 let tasksForTodoList = allTodoListTasks;
@@ -81,13 +75,6 @@ if(props.filter === "completed") {
   tasksForTodoList = allTodoListTasks.filter(t => t.isDone === true); 
 }
 
-// let tasksForTodoList = props.tasks;
-// if(props.filter === "active") {
-//      tasksForTodoList = props.tasks.filter(t => t.isDone === false); 
-//    }
-//    if(props.filter === "complited") {
-//     tasksForTodoList = props.tasks.filter(t => t.isDone === true); 
-//   }
 
   return <div>
       <h3> <EditableSpan title={props.title}

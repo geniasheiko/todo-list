@@ -85,8 +85,17 @@ return (
      
       {
             todoLists.map(tl => {
-              let allTodoListTasks = tasks[tl.id];
-              let tasksForTodoList = allTodoListTasks;
+              // let allTodoListTasks = tasks[tl.id];
+              // let tasksForTodoList = allTodoListTasks;
+              let tasksForTodoList = tasks[tl.id];
+
+              if (tl.filter === "active") {
+                  tasksForTodoList = tasksForTodoList.filter(t => !t.isDone);
+              } else if (tl.filter === "completed") {
+                  tasksForTodoList = tasksForTodoList.filter(t => t.isDone);
+              }
+          
+
       
     
 return <Paper style={{ padding: "10px"}}>
